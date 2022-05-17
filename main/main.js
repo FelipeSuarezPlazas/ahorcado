@@ -72,6 +72,9 @@ let images = {
 
 let lives = {
   graphics: createGraphics(windowWidth, windowHeight),
+  states: {
+    DEAD: 'DEAD'
+  },
   counter: 0,
   limit: images.files.length - 1, 
   start_pos: createVector(MARGIN.x-24, MARGIN.y + images.image_size.y), // title bottom
@@ -82,9 +85,27 @@ let lives = {
   color: 'red',
   size: 0,
 
+  restart: function() {
+    this.size = size = (p5.Vector.sub(this.end_pos, this.start_pos).x - 
+        (this.margin * (this.limit - 1))) / this.limit;
+    this.counter = 0;
+
+    this.graphics.fill(this.disabled_color);
+
+    this.draw();
+  },
   decrease: function() {
+    let actual_state = null;
+
     this.counter++;
     this.draw();
+
+    if (this.counter == this.limit) {
+      actual_state = this.states.DEAD;
+    }
+
+
+    return actual_state;
   },
   draw: function() {
     let local_counter = 0;
@@ -104,15 +125,6 @@ let lives = {
     }
 
     image(this.graphics, 0, 0);
-  },
-  restart: function() {
-    this.size = size = (p5.Vector.sub(this.end_pos, this.start_pos).x - 
-        (this.margin * (this.limit - 1))) / this.limit;
-    this.counter = 0;
-
-    this.graphics.fill(this.disabled_color);
-
-    this.draw();
   },
 }
 
@@ -320,6 +332,13 @@ function letter(POS) {
 
 let filds = {
   graphics: createGraphics(windowWidth, windowHeight),
+  states: {
+    REPEATED: 'REPEATED',
+    RIGHT: 'RIGHT',
+    WRONG: 'WRONG',
+    COMPLETED: 'COMPLETED',
+  },
+
   start_pos: createVector(MARGIN.x, alert.pos.y + 150),
   size: createVector(50, 5),
   right_margin: 15,
@@ -330,9 +349,11 @@ let filds = {
   active_color: 'black',
   inactive_text: 'A',
 
-  used_letters: '',
+  tried_letters: '',
   marked_letters: '',
   letters: [],
+
+  saved_word: '',
 
   center: 0, // for hint positioning.
 
@@ -342,29 +363,55 @@ let filds = {
     this.graphics.textSize(this.text_size);
   },
   restart: function(WORD) {
-    this.marked_letters = '';
-    this.used_letters = '';
-    this.filds = [];
+    this.tried_letters = '';
+    this.right_letters = '';
+    this.letters = [];
+
+    this.saved_word = WORD // IMPROVE THIS LATER *************
 
     this.__drawUnderlines(WORD);
     this.__initLettersData(WORD);
     this.__drawLetters();
   },
-  fill: function(WORD_LETTER) {
-    // se pasa una letra y hay que dibujarla en los campos que la contienen.
-    for (const LETTER of this.letters) {
-      if (LETTER.value == WORD_LETTER) {
-        LETTER.is_active = true;
-        //this.used_letters += LETTER;
-        this.marked_letters += LETTER;
+  tryLetter: function(TRY_LETTER) {
+    let actual_state = null;
+
+    if (this.tried_letters.includes(TRY_LETTER)) { // REPETED LETTER
+      actual_state = this.states.REPEATED; // ----- STATE REPEATED
+    } else { // RIGHT OR WRONG?
+      this.tried_letters += TRY_LETTER;
+
+      for (const LETTER of this.letters) {
+        if (LETTER.value == TRY_LETTER) {
+          LETTER.is_active = true;
+
+          this.right_letters += TRY_LETTER;
+
+          actual_state = this.states.RIGHT; // ----- STATE RIGHT
+
+          this.__drawLetters();
+        }
+      }
+
+      if (actual_state == null) { // THE WORD DOESN'T INCLUDES THIS LETTER.
+        actual_state = this.states.WRONG; // ----- STATE WRONG
+
+      } else if(this.right_letters.length == selected_word.length) {
+        actual_state = this.states.COMPLETED; // ----- STATE COMPLETED
       }
     }
-  },
-  addLetter: function(LETTER) {
-    this.used_letters += LETTER;
+
+    return actual_state;
   },
   autocomplete: function() {
     // a percentage of the word, appears completed.
+  },
+  __drawBackground: function() {
+    this.graphics.push();
+    this.graphics.fill('white');
+    this.graphics.noStroke();
+    this.graphics.rect(this.start_pos.x, this.start_pos.y - 50, 700, 60);
+    this.graphics.pop();
   },
   __drawUnderlines: function(WORD) {
     this.graphics.fill('black');
@@ -379,9 +426,10 @@ let filds = {
   },
   __initLettersData: function(WORD) {
     let actual_pos = this.start_pos.copy();
-    for (const LETTER of WORD) {
+    for (const WORD_LETTER of WORD) {
       const LETTER_POS = createVector(actual_pos.x + (this.size.x/2), this.start_pos.y - this.text_bottom_margin);
       const LETTER = new letter(LETTER_POS);
+      LETTER.value = WORD_LETTER;
       this.letters.push(LETTER);
 
       actual_pos.add(this.size.x + this.right_margin, 0, 0);
@@ -389,16 +437,21 @@ let filds = {
   },
   __drawLetters: function() {
     // esta se ejecuta cada vez que se añade una nueva letra.
+    // ----------------- VOLVER A DIBUJAR BACKGROUND ATRAS.
+    this.__drawBackground();
+    this.__drawUnderlines(this.saved_word);
 
     for (const LETTER of this.letters) {
       let text;
-      if (LETTER.value == '') {
-        this.graphics.fill(this.inactive_color);
-        text = this.inactive_text;
-      } else {
+      
+      if (LETTER.is_active) {
         this.graphics.fill(this.active_color);
         text = LETTER.value;
+      } else {
+        this.graphics.fill(this.inactive_color);
+        text = this.inactive_text;
       }
+
       this.graphics.text(text, LETTER.pos.x, LETTER.pos.y);
       console.log(text, LETTER.pos.x, LETTER.pos.y, 'LOOK AT THISSSS')
     }
@@ -412,14 +465,29 @@ let filds = {
 
 let hint = {
   graphics: createGraphics(windowWidth, windowHeight),
-  pos: createVector(0, filds.start_pos.y + 15), // here goes the word description.
+  pos: createVector(0, filds.start_pos.y + 15), // setup
   restart: function(WORD_DESCRIPTION) {
     this.graphics.clear();
+
+
     this.graphics.textAlign(CENTER, TOP);
+    this.graphics.rectMode(CENTER);
+
+    this.__drawBackground();
+
     //this.graphics.textSize(10);
+    this.graphics.fill('black');
     this.graphics.text('HINT: ' + WORD_DESCRIPTION, filds.center, this.pos.y);
+
     image(hint.graphics, 0, 0);
-  }
+  },
+  __drawBackground: function() {
+    this.graphics.push();
+    this.graphics.fill('white');
+    this.graphics.noStroke();
+    this.graphics.rect(filds.center, this.pos.y+3, 900, 20);
+    this.graphics.pop();
+  },
   /*
   tengo un canvas solo para esta descripcion, pero puedo acomodarla justo en la mitad de la palabra.
   */
@@ -513,60 +581,39 @@ function onTryBttn() {
 
 function onTryBttn() {
   if (actual_letter == '') return;
-
   input_html.value = '';
 
-  const state = filds.tryLetter(actual_letter);
+  const FILDS_STATE = filds.tryLetter(actual_letter);
 
-  if (state == filds.states.REPEATED) {
+  if (FILDS_STATE == filds.states.REPEATED) {
     console.log('YOU ALREADY TRIED THIS LETTER');
     alert.repeated(actual_letter);
 
-  } else if(state == filds.states.RIGHT) {
+  } else if(FILDS_STATE == filds.states.RIGHT) {
     alert.right(actual_letter);
 
-  } else if(state == filds.states.WRONG) {
-    
-  } else if(state == filds.states.COMPLETED) {
+  } else if(FILDS_STATE == filds.states.WRONG) {
+    images.next();
+    alert.wrong(actual_letter);
+    const LIVES_STATE = lives.decrease();
+
+    if(LIVES_STATE == lives.states.DEAD) { // GAME OVER
+      //deshabilitar el input.
+      alert.hide();
+      input_panel.hide();
+      results_panel.draw(0);
+    }
+
+  } else if(FILDS_STATE == filds.states.COMPLETED) {
+    alert.hide();
     input_panel.hide();
     results_panel.draw(1);
   }
 
-  if (filds.used_letters.includes(actual_letter)) { // REPEATED LETTER
-    //titilar las letras anteriormente puestas con color gris.
-    alert.repeated(actual_letter);
+  
 
-  } else if (selected_word.includes(actual_letter)) { // RIGHT LETTER.
-    if (filds.marked_letters.length == selected_word.length) {
-      //mostrar pantalla de YOU WIN.
-      //deshabilitar el input.
-      input_panel.hide();
-      results_panel.draw(1);
-    }
-    alert.right(actual_letter);
-    
-  } else { // WRONG LETTER
-
-    images.next();
-
-    alert.wrong(actual_letter);
-
-    lives.decrease();
-    console.log(lives.counter, 'TURNS INFO');
-    if (lives.counter < lives.limit) {
-      //titilar la pantalla en rojo.
-      console.log(selected_word, 'doesnt contains: ' + actual_letter);
-
-    } else { // GAME OVER
-      console.log('SE ACABARON LOS TURNOS');
-      //deshabilitar el input.
-      input_panel.hide();
-      alert.hide();
-      results_panel.draw(0);
-    }
-  }
-
-  filds.addLetter(actual_letter);
+  // ACTUALIZAR ESTO EN FILDS. ***********************************
+  //filds.addLetter(actual_letter);
 
   actual_letter = '';
 }
