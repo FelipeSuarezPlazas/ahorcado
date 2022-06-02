@@ -1,28 +1,46 @@
 
 
-// -------------------------------------------------------------- ALPHABET SOUP.
 
-new p5();
-
-// -------------------------------------------------------------- VARS.
+// ------------------------------------------------------------------------ START MENU.
 
 
+let menu = {
+  menu: document.getElementById('menu'),
+  title: document.getElementById('title'),
+  start_button: document.getElementById('start-button'),
+  timeout: null,
 
+  setup: function() {
+    this.start_button.onclick = this.__handleStartButtonClick.bind(this);
+    this.restart()
+  },
+  restart: function(msgs) {
+    /*
+    this.title.innerHTML = msgs.title_msg;
+    this.start_button.innerHTML = msgs.start_button_msg;*/
 
+    this.title.innerHTML = 'MEMORISE';
+    this.start_button.innerHTML = 'START';
 
-const MARGIN = createVector(windowWidth/3, 20);
+    this.menu.style.zIndex = 10;
+    this.menu.style.opacity = '1';
+    this.start_button.disabled = false;
 
-const DESCRIPTIONS = {
-  'bubble': 'A ball formed of air surrounded by liquid that floats in the air.', 
-  'business': 'The activity of buying and selling goods and services.', 
-  'success': 'The achieving of the results wanted or hoped for.',
-  'common': 'The same in a lot of places or for a lot of people.',
-  'yellow': 'A colour like lemon or gold or the sun.',
-  'address': 'The number of the place where a person lives or works.',
+  },
+  __handleStartButtonClick: function() {
+    console.log('start button clicked');
+
+    this.start_button.disabled = true;
+    this.menu.style.opacity = '0';
+
+    this.timeout = setTimeout(() => {
+
+      this.menu.style.zIndex = -10;
+      control.startGame();
+
+    }, 1000);
+  },
 }
-
-let words = Object.keys(DESCRIPTIONS);
-words = words.map(word => word.toUpperCase());
 
 
 // ------------------------------------------------------ IMAGES
@@ -68,206 +86,80 @@ let images = {
 }
 
 
-// ------------------------------------------------------ LIVES
+// ------------------------------------------------------ HEARTS
 
-let lives = {
-  graphics: createGraphics(windowWidth, windowHeight),
-  states: {
-    DEAD: 'DEAD'
+let hearts = {
+  setup: function() {
+
   },
-  counter: 0,
-  limit: images.files.length - 1, 
-  start_pos: createVector(MARGIN.x-24, MARGIN.y + images.image_size.y), // title bottom
-  end_pos: createVector(MARGIN.x + images.image_size.x-24, MARGIN.y + images.image_size.y),
-  margin: 10,
-  height: 8,
-  disabled_color: 'grey',
-  color: 'red',
-  size: 0,
-
   restart: function() {
-    this.size = size = (p5.Vector.sub(this.end_pos, this.start_pos).x - 
-        (this.margin * (this.limit - 1))) / this.limit;
-    this.counter = 0;
-
-    this.graphics.fill(this.disabled_color);
-
-    this.draw();
-  },
-  decrease: function() {
-    let actual_state = null;
-
-    this.counter++;
-    this.draw();
-
-    if (this.counter == this.limit) {
-      actual_state = this.states.DEAD;
-    }
-
-
-    return actual_state;
-  },
-  draw: function() {
-    let local_counter = 0;
-
-    for (let position = this.start_pos.copy(); position.x <= this.end_pos.x; position.x += (this.size)+this.margin) {
-      if (local_counter < this.counter) {
-        this.graphics.fill(this.color);
-      } else {
-        this.graphics.fill(this.disabled_color);
-      }
-
-
-      this.graphics.rect(position.x, position.y-10, this.size, this.height, 20);
-
-
-      local_counter++;
-    }
-
-    image(this.graphics, 0, 0);
-  },
-}
-
-// ------------------------------------------------------ ALERTS
-
-
-let alert = {
-  graphics: createGraphics(windowWidth, windowHeight),
-  pos: createVector(MARGIN.x + (images.image_size.x/2)-24, lives.start_pos.y + 20), // red
-  top_margin: 20,
-  text_size: 20,
-  rect_size: createVector(600, 30),
-
-  default_text: "Try a letter you think the word may contain.",
-  right_text: "Good! The word contains this letter. NOW TRY ANOTHER.",
-  wrong_text: "The word doesn't contains this letter. TRY ANOTHER.",
-  repeated_text: "You already tried this letter. TRY ANOTHER.",
-
-  default_color: 'black',
-  right_color: 'blue',
-  wrong_color: 'red',
-  repeated_color: 'grey',
-
-  restart: function() { // ******************* FALTA IMPLEMENTAR *******
-    this.graphics.rectMode(CENTER);
-    this.graphics.textAlign(CENTER, CENTER);
-    this.graphics.textFont('Cursive');
-    this.graphics.noStroke();
-    this.graphics.textSize(this.text_size);
-
-    this.__draw(this.default_text, this.default_color);
-  },
-  hide: function() {
-    this.__drawRectangle();
-
-    image(this.graphics,0,0);
-  },
-  right: function(LETTER) {
-    this.__draw(this.right_text, this.right_color);
-  },
-  wrong: function(LETTER) {
-    this.__draw(this.wrong_text, this.wrong_color);
-  },
-  repeated: function(LETTER) {
-    this.__draw(this.repeated_text, this.repeated_color);
-  },
-  __drawRectangle: function() {
-    this.graphics.fill('white');
-    this.graphics.rect(this.pos.x, this.pos.y, this.rect_size.x, this.rect_size.y);
-  },
-  __drawText: function(TEXT, COLOR) {
-    this.graphics.fill(COLOR);
-    this.graphics.text(TEXT, this.pos.x, this.pos.y+2);
-    console.log(TEXT, COLOR, 'AND THIS?');
-  },
-  __draw: function(TEXT, COLOR) {
-    console.log(TEXT, COLOR);
-    this.__drawRectangle();
-    this.__drawText(TEXT, COLOR);
-
-    image(this.graphics,0,0);
-    console.log('IS THIS SHOWING OFF??');
+    
   }
 }
 
-// ------------------------------------------------------ RESULTS PANEL
 
+// ------------------------------------------------------ INPUT
 
-let restart_bttn = createButton('RESTART');
-restart_bttn.mousePressed(restart);
-
-let results_panel = {
-  graphics: createGraphics(windowWidth, windowHeight),
-  result_pos: createVector(alert.pos.x, alert.pos.y + 30),
-  button_pos: createVector(alert.pos.x-16, alert.pos.y + 90),
-
-  bttn_win_text: 'NEXT LEVEL',
-  bttn_lose_text: 'TRY AGAIN',
-
-  win_text: 'YOU WIN',
-  lose_text: 'GAME OVER',
-
-  button: restart_bttn,
-
-  win_color: 'blue',
-  lose_color: 'red',
-
-  background_size: createVector(500, 80),
-
+let input = {
   setup: function() {
-    this.graphics.noStroke();
-    this.graphics.textSize(40),
-    this.graphics.textFont('Cursive'),
-    this.graphics.textAlign(CENTER, CENTER);
-    this.graphics.rectMode(CENTER);
+
   },
   restart: function() {
-    // Put a rectangle in white.
-    this.button.position(-1000, 0);
-    this.__drawRectangle();
-
-    image(this.graphics,0,0);
-  },
-  __drawRectangle: function() {
-    this.graphics.fill('white');
-    this.graphics.rect(this.result_pos.x, this.result_pos.y, 
-        this.background_size.x, this.background_size.y);
-  },
-  draw: function(RESULT) {
-
-    this.__drawRectangle();
-
-    let text;
-
-    if (RESULT == 1) { // GAME OVER
-      this.button.html(this.bttn_win_text);
-      this.graphics.fill(this.win_color);
-      text = this.win_text;
-
-    } else { // YOU WIN.
-      this.button.html(this.bttn_lose_text);
-      this.graphics.fill(this.lose_color);
-      text = this.lose_text
-    }
-
-    this.graphics.stroke('black');
-    this.graphics.strokeWeight(3);
-    this.graphics.text(text, this.result_pos.x, this.result_pos.y);
-    this.graphics.noStroke();
-
-    image(this.graphics,0,0);
-    this.button.position(this.button_pos.x, this.button_pos.y);
-  },
+    
+  }
 }
 
-// ------------------------------------------------------ INPUT PANEL
+
+// ------------------------------------------------------ TRY BUTTON
+
+let try_button {
+  setup: function() {
+
+  },
+  restart: function() {
+    
+  }
+}
 
 
-/*
-Cuál es el x del input
-y el start x de filds.?
-Debe haber tambien un separador.
-*/
+// ------------------------------------------------------ FIELDS
+
+let fields = {
+  setup: function() {
+
+  },
+  restart: function() {
+    
+  }
+}
+
+
+// ------------------------------------------------------ DESCRIPTION
+
+let description = {
+  setup: function() {
+
+  },
+  restart: function() {
+    
+  }
+}
+
+
+
+
+
+const DESCRIPTIONS = {
+  'bubble': 'A ball formed of air surrounded by liquid that floats in the air.', 
+  'business': 'The activity of buying and selling goods and services.', 
+  'success': 'The achieving of the results wanted or hoped for.',
+  'common': 'The same in a lot of places or for a lot of people.',
+  'yellow': 'A colour like lemon or gold or the sun.',
+  'address': 'The number of the place where a person lives or works.',
+}
+
+let words = Object.keys(DESCRIPTIONS);
+words = words.map(word => word.toUpperCase());
 
 
 let input_html;

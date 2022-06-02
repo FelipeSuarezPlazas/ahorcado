@@ -139,4 +139,59 @@ body {
 
 /* ---------------------------------------------  IN-GAME   */
 
+/* -------------------- TOP */
 
+#top {
+
+}
+
+#top #images {
+
+}
+
+#top #hearts {
+
+}
+
+
+/* -------------------- BOTTOM */
+
+#bottom {
+
+}
+
+
+/* -------------------- INPUT */
+
+#bottom #input-wrapper {
+
+}
+
+#bottom #input-wrapper #input-letter {
+
+}
+
+#bottom #input-wrapper #try-botton {
+
+}
+
+
+/* -------------------- GAP */
+
+#bottom #gap {
+    
+}
+
+/* -------------------- FIELDS */
+
+#bottom #fields-wrapper {
+    
+}
+
+#bottom #fields-wrapper #fields {
+    
+}
+
+#bottom #fields-wrapper #description {
+    
+}
