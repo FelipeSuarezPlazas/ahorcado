@@ -4,13 +4,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hangman</title>
+  <title>HANGMAN</title>
   <link rel="stylesheet" type="text/css" href="../styles/style.css">
 </head>
 
 <body>
-  <div class="container">
-    <div id="canva-game"></div>
+  <div id="game">
+
+    <!-- IN GAME --> <!-- This takes all the space of #game -->
+    <div id="instructions">PREPARE. LOOK CAREFULLY.</div>
+    <div id="cards-wrapper">
+
+      <div id="cards"></div>
+      <div id="hearts"></div>
+
+    </div>
+    <!-- --------- -->
+
+
+    <!-- START MENU --> <!-- The position of this is absolute and is on top of IN GAME -->
+    <div id="menu">
+
+      <div id="title">MEMORISE</div>                <!-- TITLE -->
+      <button id="start-button">START</button>      <!-- START BUTTON -->
+      <ol id="steps">                               <!-- STEPS -->
+        <li>Cards will uncover.</li>
+        <li>You have 5 seconds to memorise.</li>
+        <li>Select the pairs.</li>
+      </ol>
+
+    </div>
+    <!-- --------- -->
   </div>
 
 

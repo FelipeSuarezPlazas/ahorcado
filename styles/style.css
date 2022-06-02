@@ -1,32 +1,306 @@
 
 
+
+
+@font-face {
+    font-family: rubik-black;
+    src: url(../fonts/Rubik-BlackItalic.ttf);
+}
+
+@font-face {
+    font-family: rubik-normal;
+    src: url(../fonts/Rubik-Bold.ttf);
+}
+
+@font-face {
+    font-family: rubik-lighter;
+    src: url(../fonts/Rubik-light.ttf);
+}
+
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+
 body {
-      padding: 0;
-      margin: 0;
-      font-family: cursive;
+    display: grid;
+    place-items: center;
+    background: white;
+
+    height: 100vh;
 }
 
-.container {
-      margin: 30px;
+
+#game {
+    position: relative;
+
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: black;
+    padding: 4em 6em;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
-p {
-    font-family: cursive;  
+
+/* ---------------------------------------------  START MENU   */
+
+
+#menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    background: rgb(3 3 3);
+    /*width: 100%;
+    height: 100%;*/
+    border-radius: 10px;
+
+    transition: opacity 700ms ease;
 }
 
-input[type="text"]
-{
-    font-size:30px;
-    text-align: center;
+#title {
+    font-family: rubik-black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background: indigo;*/
+    background: white;/* #333;*/
+    width: 110%;
+    height: 1.2em;
+    margin-bottom: 40px;
+
+    /*border-radius: 50px;*/
+    /*border: 5px solid yellow;*/
+
+    color: blueviolet;
+    font-size: 4em;
+    font-weight: black;
+    /*border-radius: 10px;*/
+    /*border: 3px solid black;*/
+    /*outline: 0 10px 10px white;*/
 }
 
-span {
-    font-size: 20px;
-    font-weight: 500;
-    text-decoration: underline black;
-}
-
-img {
-    border: 5px solid;
+#start-button {
+    font-family: rubik-normal;
+    font-size: 16px;
+    background: #505050;
+    color: #e2bf1e;
+    width: 220px;
+    height: 40px;
     border-radius: 20px;
+    /*border: 2px solid #606060;*/
+    outline: 0 solid blueviolet;
+    outline-offset: 0;
+    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    margin-bottom: 70px;
 }
+
+#start-button:hover {
+    cursor: pointer;
+    outline: 2px solid blueviolet;
+    outline-offset: 4px;
+}
+
+#steps {
+    font-family: rubik-lighter;
+    color: white;
+    text-align: center;
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+}
+
+#steps li {
+    margin-bottom: 1em;
+}
+
+#steps:nth-last-child(1) {
+    margin-bottom: 70px;
+}
+
+
+/* ---------------------------------------------  IN-GAME   */
+
+
+#instructions {
+    font-family: rubik-lighter;
+    color: #ddd;
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    /*border: 2px dotted black;*/
+}
+
+
+#cards-wrapper {
+    display: flex;
+    align-items: start;
+    font-weight: 900px;
+    /*border: 2px dotted black;
+    padding: 1em;*/
+}
+
+
+#cards {
+    display: grid;
+    grid-template-columns: repeat(4, 110px);
+    grid-auto-rows: 130px;
+    grid-gap: 20px;
+}
+
+
+.wrapper {
+    position: relative;
+}
+
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 100%;
+
+    background: #f2f2f2;
+    border: 2px solid white;
+    border-radius: 10px;
+
+    transition: background 400ms ease;
+}
+
+.card-wrong-animation {
+    animation: wrong-animation 200ms 2 ease-out;
+}
+
+@keyframes wrong-animation {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    25% {
+        transform: rotateZ(-8deg);
+    }
+    50% {
+        transform: rotateZ(0deg);
+    }
+    75% {
+        transform: rotateZ(8deg);
+    }
+    100% {
+        transform: rotateZ(0deg);
+    }
+}
+
+.card-emoji {
+    /*font-family: rubik-normal;*/
+    font-size: 3em;
+}
+
+.card-word {
+    font-family: rubik-normal;
+    font-size: 16px;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+.card-cover {
+    position: absolute;
+    background: #505050;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /*width: 100%;
+    height: 100%;*/
+
+    border: 2px solid black;
+    border-radius: 10px;
+
+    outline: 2px solid black;
+    outline-offset: -2px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5em;
+
+    transition-property: opacity;
+    transition-duration: 400ms;
+    transition-timing-function: ease;
+
+    cursor: default;
+}
+
+.card-cover-hover:is(:hover, :focus) {
+    cursor: pointer;
+    outline-color: blueviolet;
+    outline-offset: 4px;
+    /*background: #333;*/
+    /*border: 2px solid black;*/
+    /*transform: scale(1.1);*/
+}
+
+#hearts {
+    border: 2px solid #bbb;
+    height: max-content;
+    margin-left: 2em;
+    padding: 5px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.heart {
+    position: relative;
+    /*margin-bottom: 5px;*/
+}
+
+.heart-decrease-animation {
+    animation: decrease-animation 600ms ease forwards;
+}
+
+@keyframes decrease-animation {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    50% {
+        opacity: 1;
+        /*transform: translateX(25px);*/
+    }
+    80% {
+        opacity: 0.3;
+        /*transform: translateX(25px);*/
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+
+
+
+
+
+
