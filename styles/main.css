@@ -163,8 +163,8 @@ body {
   border: 5px solid black;
   border-radius: 10px;
   transition-property: transform;
-  transition-duration: 400ms;
-  transition-timing-function: ease;
+  transition-duration: 600ms;
+  transition-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.27);
 }
 
 /* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_input_letter.scss */
@@ -202,42 +202,12 @@ body {
 
 /* line 30, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 .field-right-letter {
-  animation: right-letter-animation3 600ms ease;
+  animation: right-letter-animation 600ms ease;
 }
 
 @keyframes right-letter-animation {
   0% {
     opacity: 0;
-    /*transform: translateY(0px);*/
-  }
-  50% {
-    opacity: 1;
-    /*transform: translateY(5px);*/
-  }
-}
-
-@keyframes right-letter-animation2 {
-  0% {
-    opacity: 0;
-    transform: translateY(0px);
-  }
-  33% {
-    opacity: 1;
-    transform: translateY(10px);
-  }
-  66% {
-    opacity: 0;
-    transform: translateY(0px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(10px);
-  }
-}
-
-@keyframes right-letter-animation3 {
-  0% {
-    opacity: 0;
   }
   33% {
     opacity: 1;
@@ -250,28 +220,28 @@ body {
   }
 }
 
-/* line 79, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+/* line 49, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 .fields-wrong-letter {
-  animation: fields-wrong-letter 300ms ease 2;
+  animation: fields-wrong-letter 200ms ease-in-out 2;
 }
 
 @keyframes fields-wrong-letter {
   0% {
     color: #ccc;
-    transform: translateY(0px);
+    transform: translateX(0px);
     transform: rotateZ(0px);
   }
   50% {
     color: #dd2c2c;
-    transform: translateY(5px);
+    transform: translateX(10px);
   }
   100% {
     color: #ccc;
-    transform: translateY(0px);
+    transform: translateX(0px);
   }
 }
 
-/* line 99, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+/* line 69, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 .fields-win {
   animation: win 600ms ease 1 forwards;
 }
@@ -291,7 +261,7 @@ body {
   }
 }
 
-/* line 118, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+/* line 88, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 #fields:nth-last-child(1) {
   margin-right: 0;
 }

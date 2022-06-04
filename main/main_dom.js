@@ -57,7 +57,7 @@ let images = {
   ],
   images: [],
   counter: 1,
-  x_offset: 20,
+  offset: 200,
 
   setup: function() { // load all the images in the html.
     this.files.forEach((FILE, INDEX) => {
@@ -77,7 +77,7 @@ let images = {
     this.images.forEach((IMG, INDEX) => {
       if (INDEX > 0) {
         IMG.style.opacity = 0;
-        IMG.style.transform = 'translateX(' + (this.x_offset * (-1)) + 'px)';
+        IMG.style.transform = 'translateX(' + (this.offset * (-1)) + 'px)';
       }
     });
   },
@@ -296,14 +296,10 @@ let fields = {
       }
 
     } else if (not_found) { // no esta
-      for (const FIELD of this.fields) {
-        if (!FIELD.is_active) {
-          FIELD.p.classList.add(this.wrong_letter_animation_class);
-          FIELD.p.addEventListener('animationend', () => {
-            FIELD.p.classList.remove(this.wrong_letter_animation_class);
-          })
-        }
-      }
+      this.container.classList.add(this.wrong_letter_animation_class);
+      this.container.addEventListener('animationend', () => {
+        this.container.classList.remove(this.wrong_letter_animation_class);
+      });
 
 
       console.log('LETTER NOT FOUND');
