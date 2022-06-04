@@ -1,0 +1,85 @@
+
+
+
+#menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    background: black;
+    /*width: 100%;
+    height: 100%;*/
+    border-radius: 10px;
+
+    /*opacity: 0;
+    z-index: -10;*/
+
+    transition: opacity 700ms ease;
+}
+
+#title {
+    font-family: rubik-black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*background: indigo;*/
+    background: white;
+    width: 110%;
+    height: 1.2em;
+    margin-bottom: 40px;
+
+    /*border-radius: 50px;*/
+    /*border: 5px solid yellow;*/
+
+    color: blueviolet;
+    font-size: 4em;
+    font-weight: black;
+    /*border-radius: 10px;*/
+    /*border: 3px solid black;*/
+    /*outline: 0 10px 10px white;*/
+}
+
+#start-button {
+    font-family: rubik-normal;
+    font-size: 16px;
+    background: #505050;
+    color: #e2bf1e;
+    width: 220px;
+    height: 40px;
+    border-radius: 20px;
+    /*border: 2px solid #606060;*/
+    outline: 0 solid blueviolet;
+    outline-offset: 0;
+    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    margin-bottom: 70px;
+}
+
+#start-button:hover {
+    cursor: pointer;
+    outline: 2px solid blueviolet;
+    outline-offset: 4px;
+}
+
+#steps {
+    font-family: rubik-lighter;
+    color: white;
+    text-align: center;
+    list-style-position: inside;
+    padding: 0;
+    margin: 0;
+}
+
+#steps li {
+    margin-bottom: 1em;
+}
+
+#steps:nth-last-child(1) {
+    margin-bottom: 70px;
+}

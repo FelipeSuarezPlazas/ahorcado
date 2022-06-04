@@ -1,7 +1,7 @@
 
 
 
-// ------------------------------------------------------------------------ START MENU.
+// ------------------------------------------------------------------------ $MENU.
 
 
 let menu = {
@@ -43,7 +43,7 @@ let menu = {
 }
 
 
-// ------------------------------------------------------ IMAGES
+// ------------------------------------------------------ $IMAGES
 
 let images = {
   container: document.getElementById('images'),
@@ -100,13 +100,14 @@ let images = {
 }
 
 
-// ------------------------------------------------------ HEARTS
+// ------------------------------------------------------ $HEARTS
 
 let hearts = {
   container: document.getElementById('hearts'),
   amount: images.files.length - 1,
   hearts: [],
   counter: 0,
+  wrong_animation_class: 'heart_wrong_animation',
 
   setup: function() {
     for (let i=0; i<this.amount; i++) {
@@ -125,9 +126,17 @@ let hearts = {
     }
   },
   damage: function() {
+    if (this.counter >= this.amount) return;
+
     console.log('HEART DAMAGE FUNCTION');
     const HEART = this.hearts[this.counter];
     HEART.style.background = 'red';
+
+    HEART.classList.add(this.wrong_animation_class);
+
+    HEART.addEventListener('animationend', () => {
+      HEART.classList.remove(this.wrong_animation_class);
+    })
 
     this.counter += 1;
     if (this.counter >= this.amount) {
@@ -137,7 +146,7 @@ let hearts = {
 }
 
 
-// ------------------------------------------------------ INPUT
+// ------------------------------------------------------ $INPUT
 
 let input = {
   input: document.getElementById('input-letter'),
@@ -182,7 +191,7 @@ let input = {
   },
 }
 
-// ------------------------------------------------------ FIELDS
+// ------------------------------------------------------ $FIELDS
 
 class Field {
   constructor(VALUE, PARENT) {
@@ -205,12 +214,21 @@ class Field {
     this.parent = PARENT;
     this.div = DIV;
     this.p = LETTER;
+    this.rigth_letter_animation_class = 'field-right-letter';
   }
 
-  activateLetter() {
+  activateLetter(omit_animation) {
     this.is_active = true;
     this.p.innerHTML = this.letter;
     this.p.style.color = '#333';
+
+    if (omit_animation) return;
+    console.log('ANIMATION WILL BE', omit_animation);
+
+    this.p.classList.add(this.rigth_letter_animation_class);
+    this.p.addEventListener('animationend', () => {
+      this.p.classList.remove(this.rigth_letter_animation_class);
+    });
   }
 
   remove() {
@@ -296,8 +314,15 @@ let fields = {
     } else if (is_available) {
       console.log('LETTER AVAILABLE');
       selected_or_available_fields.forEach((FIELD, INDEX) => {
-        FIELD.activateLetter();
         this.fields_already_selected.push(FIELD);
+      })
+
+      selected_or_available_fields.forEach((FIELD, INDEX) => {
+        let omit_animation = false;
+        if (this.fields_already_selected.length == this.fields.length) {
+          omit_animation = true;
+        }
+        FIELD.activateLetter(omit_animation);
       })
       
       if (this.fields_already_selected.length == this.fields.length) {
@@ -320,7 +345,7 @@ let fields = {
 }
 
 
-// ------------------------------------------------------ DESCRIPTION
+// ------------------------------------------------------ $DESCRIPTION
 
 let description = {
   description: document.getElementById('description'),
@@ -341,7 +366,7 @@ let description = {
 }
 
 
-// ------------------------------------------------------ CONTROL
+// ------------------------------------------------------ $CONTROL
 
 let control = {
   timeout: null,
@@ -361,7 +386,12 @@ let control = {
     // Enviar un mensajo a los corazones
     // Enviar un mnsaje a las imagenes.
     hearts.damage();
-    images.next();
+    this.timeout = setTimeout(() => {
+      clearTimeout(this.timeout);
+      images.next();
+
+    }, 300);
+    
 
   }, 
   startGame: function() {
@@ -400,7 +430,7 @@ let control = {
 
       }, 500);
 
-    }, 1000);
+    }, 1500);
 
   }
 }

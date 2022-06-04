@@ -1,0 +1,19 @@
+
+
+
+#bottom {
+    display: flex;
+
+    #input-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    margin-right: 20px;
+	}
+
+    #fields-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	}
+}

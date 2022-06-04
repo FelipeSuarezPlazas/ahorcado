@@ -1,0 +1,67 @@
+
+
+
+
+#fields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 0 10px;
+
+    .field {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    flex-direction: column;
+
+	    width: 60px;
+	    /*height: 80px;*/
+
+	    font-family: rubik-normal;
+	    font-size: 3em;
+
+	    margin-right: 10px;
+	}
+}
+
+.field-right-letter{
+    animation: right-letter-animation 500ms ease;
+}
+
+@keyframes right-letter-animation {
+    0% {
+        opacity: 0;
+    }
+    33% {
+        opacity: 1;
+    }
+    66% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fields-win {
+    animation: win 500ms ease 2;
+}
+
+@keyframes win {
+    0% {
+        background: white;
+    }
+    50% {
+        background: #46e268;
+    }
+    100% {
+        background: white;
+    }
+}
+
+#fields:nth-last-child(1) {
+    margin-right: 0;
+}

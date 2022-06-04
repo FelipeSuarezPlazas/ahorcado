@@ -1,0 +1,302 @@
+@font-face {
+  font-family: rubik-black;
+  src: url(../fonts/Rubik-BlackItalic.ttf);
+}
+
+@font-face {
+  font-family: rubik-normal;
+  src: url(../fonts/Rubik-Bold.ttf);
+}
+
+@font-face {
+  font-family: rubik-lighter;
+  src: url(../fonts/Rubik-light.ttf);
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_game.scss */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 14, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_game.scss */
+body {
+  display: grid;
+  place-items: center;
+  background: white;
+  height: 100vh;
+}
+
+/* line 23, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_game.scss */
+#game {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: white;
+  padding: 2em 6em;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  background: black;
+  /*width: 100%;
+    height: 100%;*/
+  border-radius: 10px;
+  /*opacity: 0;
+    z-index: -10;*/
+  transition: opacity 700ms ease;
+}
+
+/* line 27, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#title {
+  font-family: rubik-black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*background: indigo;*/
+  background: white;
+  width: 110%;
+  height: 1.2em;
+  margin-bottom: 40px;
+  /*border-radius: 50px;*/
+  /*border: 5px solid yellow;*/
+  color: blueviolet;
+  font-size: 4em;
+  font-weight: black;
+  /*border-radius: 10px;*/
+  /*border: 3px solid black;*/
+  /*outline: 0 10px 10px white;*/
+}
+
+/* line 49, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#start-button {
+  font-family: rubik-normal;
+  font-size: 16px;
+  background: #505050;
+  color: #e2bf1e;
+  width: 220px;
+  height: 40px;
+  border-radius: 20px;
+  /*border: 2px solid #606060;*/
+  outline: 0 solid blueviolet;
+  outline-offset: 0;
+  text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+  margin-bottom: 70px;
+}
+
+/* line 64, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#start-button:hover {
+  cursor: pointer;
+  outline: 2px solid blueviolet;
+  outline-offset: 4px;
+}
+
+/* line 70, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#steps {
+  font-family: rubik-lighter;
+  color: white;
+  text-align: center;
+  list-style-position: inside;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 79, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#steps li {
+  margin-bottom: 1em;
+}
+
+/* line 83, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_menu.scss */
+#steps:nth-last-child(1) {
+  margin-bottom: 70px;
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_top.scss */
+#top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 80px;
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_bottom.scss */
+#bottom {
+  display: flex;
+}
+
+/* line 7, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_bottom.scss */
+#bottom #input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+/* line 13, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_bottom.scss */
+#bottom #fields-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* line 3, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_images.scss */
+#images {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  background: blue;
+  margin-bottom: 10px;
+  border-radius: 50px;
+}
+
+/* line 11, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_images.scss */
+#images .image {
+  position: absolute;
+  border: 5px solid black;
+  border-radius: 10px;
+  transition: opacity 50ms ease;
+}
+
+/* line 3, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
+#hearts {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 10px;
+  grid-gap: 10px;
+  max-width: 360px;
+}
+
+/* line 10, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
+#hearts .heart {
+  /*background: red;*/
+  border: 2px solid black;
+  height: 15px;
+  border-radius: 20px;
+  transition: background 400ms ease;
+}
+
+/* line 20, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
+.heart_wrong_animation {
+  animation: heart-wrong 200ms ease 2;
+}
+
+@keyframes heart-wrong {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  25% {
+    transform: rotateZ(8deg);
+  }
+  50% {
+    transform: rotateZ(0deg);
+  }
+  75% {
+    transform: rotateZ(-8deg);
+  }
+  100% {
+    transform: rotateZ(0deg);
+  }
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_input_letter.scss */
+#input-letter {
+  width: 60px;
+  height: 60px;
+  font-size: 3em;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* line 5, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+#fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  border: 3px solid black;
+  border-radius: 10px;
+  padding: 0 10px;
+}
+
+/* line 14, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+#fields .field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 60px;
+  /*height: 80px;*/
+  font-family: rubik-normal;
+  font-size: 3em;
+  margin-right: 10px;
+}
+
+/* line 30, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+.field-right-letter {
+  animation: right-letter-animation 500ms ease;
+}
+
+@keyframes right-letter-animation {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* line 49, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+.fields-win {
+  animation: win 500ms ease 2;
+}
+
+@keyframes win {
+  0% {
+    background: white;
+  }
+  50% {
+    background: #46e268;
+  }
+  100% {
+    background: white;
+  }
+}
+
+/* line 65, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+#fields:nth-last-child(1) {
+  margin-right: 0;
+}
+
+/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_description.scss */
+#description {
+  font-family: arial;
+  max-width: 300px;
+  text-align: center;
+  color: black;
+  font-size: 14px;
+  transition: opacity 400ms ease;
+}
+
+/*# sourceMappingURL=main.css.map */

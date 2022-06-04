@@ -1,0 +1,18 @@
+
+
+#images {
+    position: relative;
+    width: 360px;
+    height: 360px;
+    background: blue;
+    margin-bottom: 10px;
+    border-radius: 50px;
+    
+    .image {
+        position: absolute;
+        border: 5px solid black;
+        border-radius: 10px;
+
+        transition: opacity 50ms ease;
+    }
+}
