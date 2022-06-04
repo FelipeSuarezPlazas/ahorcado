@@ -57,6 +57,7 @@ let images = {
   ],
   images: [],
   counter: 1,
+  x_offset: 20,
 
   setup: function() { // load all the images in the html.
     this.files.forEach((FILE, INDEX) => {
@@ -76,6 +77,7 @@ let images = {
     this.images.forEach((IMG, INDEX) => {
       if (INDEX > 0) {
         IMG.style.opacity = 0;
+        IMG.style.transform = 'translateX(' + (this.x_offset * (-1)) + 'px)';
       }
     });
   },
@@ -91,58 +93,15 @@ let images = {
 
     const IMG = this.images[this.counter];
     IMG.style.opacity = 1;
+    IMG.style.transform = 'translateX(0px)';
 
     this.counter += 1;
-    if (this.counter >= this.amount-1) {
+    console.log(this.counter, this.amount-1, this.counter >= this.amount-1, 'IMAGES NEXT IF CONTROL FINICHS');
+    if (this.counter >= this.files.length) {
+      console.log('IMAGES NEXT IF CONTROL FINICHS');
       control.finish();
     }
   }
-}
-
-
-// ------------------------------------------------------ $HEARTS
-
-let hearts = {
-  container: document.getElementById('hearts'),
-  amount: images.files.length - 1,
-  hearts: [],
-  counter: 0,
-  wrong_animation_class: 'heart_wrong_animation',
-
-  setup: function() {
-    for (let i=0; i<this.amount; i++) {
-      const HEART = document.createElement('div');
-      HEART.setAttribute('class', 'heart');
-      this.hearts.push(HEART);
-      this.container.appendChild(HEART);
-
-    }
-    this.restart();
-  },
-  restart: function() {
-    this.counter = 0;
-    for (const HEART of this.hearts) {
-      HEART.style.background = '#eee';
-    }
-  },
-  damage: function() {
-    if (this.counter >= this.amount) return;
-
-    console.log('HEART DAMAGE FUNCTION');
-    const HEART = this.hearts[this.counter];
-    HEART.style.background = 'red';
-
-    HEART.classList.add(this.wrong_animation_class);
-
-    HEART.addEventListener('animationend', () => {
-      HEART.classList.remove(this.wrong_animation_class);
-    })
-
-    this.counter += 1;
-    if (this.counter >= this.amount) {
-      control.finish();
-    }
-  },
 }
 
 
@@ -239,6 +198,7 @@ class Field {
 let fields = {
   container: document.getElementById('fields'),
   win_animation_class: 'fields-win',
+  wrong_letter_animation_class: 'fields-wrong-letter',
 
   descriptions: {
     'bubble': 'A ball formed of air surrounded by liquid that floats in the air.', 
@@ -270,6 +230,8 @@ let fields = {
     this.fields = [];
     this.fields_already_selected = [];
 
+    this.container.classList.remove(this.win_animation_class);
+
     // select a random word.
     let randomIndex = Math.round(Math.random() * this.words.length-1);
     if (randomIndex < 0) randomIndex = 0;
@@ -300,7 +262,7 @@ let fields = {
         is_available = true;
         selected_or_available_fields.push(FIELD);
 
-        if (FIELD.is_active == true) {
+        if (FIELD.is_active) {
           already_selected = true;
         }
       }
@@ -329,16 +291,28 @@ let fields = {
         // YOU WIN.
         console.log('ALL THE FIELDS HAVE BEEN COMPLETED');
         this.container.classList.add(this.win_animation_class);
-        this.container.addEventListener('animationend', () => {
-          this.container.classList.remove(this.win_animation_class);
-        })
+        
         control.finish();
       }
 
     } else if (not_found) { // no esta
+      for (const FIELD of this.fields) {
+        if (!FIELD.is_active) {
+          FIELD.p.classList.add(this.wrong_letter_animation_class);
+          FIELD.p.addEventListener('animationend', () => {
+            FIELD.p.classList.remove(this.wrong_letter_animation_class);
+          })
+        }
+      }
+
+
       console.log('LETTER NOT FOUND');
       // Enviar un mensaje a control de que la palabra
       // no contiene la letra.
+      /*this.container.classList.add(this.wrong_letter_animation_class);
+      this.container.addEventListener('animationend', () => {
+        this.container.classList.remove(this.wrong_letter_animation_class);
+      })*/
       control.wrongLetter();
     }
   }
@@ -374,7 +348,6 @@ let control = {
   setup: function() {
     menu.setup();
     images.setup();
-    hearts.setup();
     input.setup();
     fields.setup();
     description.setup();
@@ -383,33 +356,20 @@ let control = {
     fields.tryLetter(LETTER); 
   },
   wrongLetter: function() {
-    // Enviar un mensajo a los corazones
-    // Enviar un mnsaje a las imagenes.
-    hearts.damage();
     this.timeout = setTimeout(() => {
       clearTimeout(this.timeout);
       images.next();
 
-    }, 300);
-    
+    }, 800);
 
   }, 
   startGame: function() {
     input.input.focus();
     this.timeout = setTimeout(() => {
       clearTimeout(this.timeout);
-
       description.show();
+
     }, 500);
-  },
-  coverCards: function() {
-    cards.coverAll();
-    this.timeout = setTimeout(() => {
-      cards.switchInputAvailability('add');
-    }, 500);
-  },
-  wrongSelection() {
-    hearts.decrease();
   },
   finish: function() {
     input.disable();
@@ -423,14 +383,13 @@ let control = {
       this.timeout = setTimeout(() => {
         clearTimeout(this.timeout);
         images.restart();
-        hearts.restart();
         input.restart();
         fields.restart();
         description.setup();
 
       }, 500);
 
-    }, 1500);
+    }, 2000);
 
   }
 }

@@ -28,10 +28,40 @@
 }
 
 .field-right-letter{
-    animation: right-letter-animation 500ms ease;
+    animation: right-letter-animation3 600ms ease;
 }
 
 @keyframes right-letter-animation {
+    0% {
+        opacity: 0;
+        /*transform: translateY(0px);*/
+    }
+    50% {
+        opacity: 1;
+        /*transform: translateY(5px);*/
+    }
+}
+
+@keyframes right-letter-animation2 {
+    0% {
+        opacity: 0;
+        transform: translateY(0px);
+    }
+    33% {
+        opacity: 1;
+        transform: translateY(10px);
+    }
+    66% {
+        opacity: 0;
+        transform: translateY(0px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(10px);
+    }
+}
+
+@keyframes right-letter-animation3 {
     0% {
         opacity: 0;
     }
@@ -46,19 +76,42 @@
     }
 }
 
+.fields-wrong-letter {
+    animation: fields-wrong-letter 300ms ease 2;
+}
+
+@keyframes fields-wrong-letter {
+    0% {
+        color: #ccc;
+        transform: translateY(0px);
+        transform: rotateZ(0px);
+    }
+    50% {
+        color: #dd2c2c;
+        transform: translateY(5px);
+    }
+    100% {
+        color: #ccc;
+        transform: translateY(0px);
+    }
+}
+
 .fields-win {
-    animation: win 500ms ease 2;
+    animation: win 600ms ease 1 forwards;
 }
 
 @keyframes win {
     0% {
         background: white;
     }
-    50% {
+    33% {
         background: #46e268;
     }
-    100% {
+    66% {
         background: white;
+    }
+    100% {
+        background: #46e268;
     }
 }
 

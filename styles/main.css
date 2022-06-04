@@ -127,14 +127,6 @@ body {
   margin-bottom: 70px;
 }
 
-/* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_top.scss */
-#top {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 80px;
-}
-
 /* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/wrappers/_bottom.scss */
 #bottom {
   display: flex;
@@ -170,48 +162,9 @@ body {
   position: absolute;
   border: 5px solid black;
   border-radius: 10px;
-  transition: opacity 50ms ease;
-}
-
-/* line 3, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
-#hearts {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 10px;
-  grid-gap: 10px;
-  max-width: 360px;
-}
-
-/* line 10, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
-#hearts .heart {
-  /*background: red;*/
-  border: 2px solid black;
-  height: 15px;
-  border-radius: 20px;
-  transition: background 400ms ease;
-}
-
-/* line 20, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_hearts.scss */
-.heart_wrong_animation {
-  animation: heart-wrong 200ms ease 2;
-}
-
-@keyframes heart-wrong {
-  0% {
-    transform: rotateZ(0deg);
-  }
-  25% {
-    transform: rotateZ(8deg);
-  }
-  50% {
-    transform: rotateZ(0deg);
-  }
-  75% {
-    transform: rotateZ(-8deg);
-  }
-  100% {
-    transform: rotateZ(0deg);
-  }
+  transition-property: transform;
+  transition-duration: 400ms;
+  transition-timing-function: ease;
 }
 
 /* line 4, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_input_letter.scss */
@@ -249,10 +202,40 @@ body {
 
 /* line 30, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 .field-right-letter {
-  animation: right-letter-animation 500ms ease;
+  animation: right-letter-animation3 600ms ease;
 }
 
 @keyframes right-letter-animation {
+  0% {
+    opacity: 0;
+    /*transform: translateY(0px);*/
+  }
+  50% {
+    opacity: 1;
+    /*transform: translateY(5px);*/
+  }
+}
+
+@keyframes right-letter-animation2 {
+  0% {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+  33% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  66% {
+    opacity: 0;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes right-letter-animation3 {
   0% {
     opacity: 0;
   }
@@ -267,24 +250,48 @@ body {
   }
 }
 
-/* line 49, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+/* line 79, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+.fields-wrong-letter {
+  animation: fields-wrong-letter 300ms ease 2;
+}
+
+@keyframes fields-wrong-letter {
+  0% {
+    color: #ccc;
+    transform: translateY(0px);
+    transform: rotateZ(0px);
+  }
+  50% {
+    color: #dd2c2c;
+    transform: translateY(5px);
+  }
+  100% {
+    color: #ccc;
+    transform: translateY(0px);
+  }
+}
+
+/* line 99, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 .fields-win {
-  animation: win 500ms ease 2;
+  animation: win 600ms ease 1 forwards;
 }
 
 @keyframes win {
   0% {
     background: white;
   }
-  50% {
+  33% {
     background: #46e268;
   }
-  100% {
+  66% {
     background: white;
+  }
+  100% {
+    background: #46e268;
   }
 }
 
-/* line 65, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
+/* line 118, ../Users/felip/OneDrive/Documents/GitHub/international-data/ahorcado/sass/components/_fields.scss */
 #fields:nth-last-child(1) {
   margin-right: 0;
 }
